@@ -1,8 +1,10 @@
 # 强化学习 5 —— SARSA and Q-Learning
 
-上篇文章 [强化学习——时序差分 (TD) 介绍]() 我们介绍了时序差分TD算法解决强化学习的评估和控制问题，TD对比MC有很多优势，比如TD有更低方差，可以学习不完整的序列。所以我们可以在策略控制循环中使用TD来代替MC。优于TD算法的诸多优点，因此现在主流的强化学习求解方法都是基于TD的。这篇文章会使用就用代码实现 SARSA 和 Q-Learning 这两种算法。
+上篇文章 [强化学习——时序差分 (TD) --- SARSA and Q-Learning](https://blog.csdn.net/november_chopin/article/details/107897225) 我们介绍了时序差分TD算法解决强化学习的评估和控制问题，TD对比MC有很多优势，比如TD有更低方差，可以学习不完整的序列。所以我们可以在策略控制循环中使用TD来代替MC。优于TD算法的诸多优点，因此现在主流的强化学习求解方法都是基于TD的。这篇文章会使用就用代码实现 SARSA 和 Q-Learning 这两种算法。
 
 ## 一、算法介绍
+
+关于SARSA 和 Q-Learning算法的详细介绍，本篇博客不做过多介绍，若不熟悉可点击文章开头链接查看。
 
 Sarsa 和 QLearning 时序差分TD解决强化学习控制问题的两种算法，两者非常相似，从更新公式就能看出来：
 
@@ -79,7 +81,7 @@ class Sarsa:
         self.Q[state, action] += self.lr * (target_q - self.Q[state, action])
 ```
 
-上面代码重点是 `learn()` 方法中的 Q-table 的更新，结合公式还是比较容易理解的。下面是每一个 episode 的流程：对于一个 episode 先调用 `reset()` 方法获得初始化状态`state`，然后选择当前的动作 `action` ，使用当前的动作让环境执行一步，获取到下一个状态 `next_state` 以及奖励 `reward` ，然后利用这些数据进行更新Q表格，注意 更新之后要把下一个状态和动作赋值给当前的状态和动作，然后循环。
+上面代码重点是 `learn()` 方法中的 `Q-table` 的更新，结合公式还是比较容易理解的。下面是每一个 episode 的流程：对于一个 episode 先调用 `reset()` 方法获得初始化状态`state`，然后选择当前的动作 `action` ，使用当前的动作让环境执行一步，获取到下一个状态 `next_state` 以及奖励 `reward` ，然后利用这些数据进行更新Q表格，注意 更新之后要把下一个状态和动作赋值给当前的状态和动作，然后循环。
 
 ```python
 def run_episode(self, render=False):
@@ -96,7 +98,7 @@ def run_episode(self, render=False):
         if done: break
 ```
 
-完整代码见[强化学习——SARSA 算法]()
+完整代码见[强化学习——SARSA 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Sarsa.py)
 
 ### 2、Q-Learning
 
@@ -136,3 +138,4 @@ def run_episode(self, render=False):
         if done: break
 ```
 
+完整代码见[强化学习——Q-Learning 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Q-Learning.py)
