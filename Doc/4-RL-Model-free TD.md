@@ -142,7 +142,7 @@ Q-Learning直接学习的是最优策略，而Sarsa在学习最优策略的同�
 
 ![UH94fJ.png](https://s1.ax1x.com/2020/07/22/UH94fJ.png)
 
-关于 Sarsa 和 Q-Learning 算法的代码详解可以看下一篇文章[强化学习——Sarsa 和 Q-Learning 算法实战]() 
+关于 Sarsa 和 Q-Learning 算法的代码详解可以看下一篇文章[强化学习——Sarsa 和 Q-Learning 算法实战](https://blog.csdn.net/november_chopin/article/details/107898611) 
 
 ## 三、DP、MC、TD的对比
 
