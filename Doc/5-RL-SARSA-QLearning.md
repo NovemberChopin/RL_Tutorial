@@ -98,7 +98,7 @@ def run_episode(self, render=False):
         if done: break
 ```
 
-完整代码见[强化学习——SARSA 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Sarsa.py)
+完整代码见[强化学习——SARSA 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Sarsa.py) ，劳烦大人点个 `star` 可好？
 
 ### 2、Q-Learning
 
@@ -138,4 +138,4 @@ def run_episode(self, render=False):
         if done: break
 ```
 
-完整代码见[强化学习——Q-Learning 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Q-Learning.py)
+完整代码见[强化学习——Q-Learning 算法](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/Q-Learning.py)，劳烦大人点个 `star` 可好？

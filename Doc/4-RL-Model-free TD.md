@@ -16,7 +16,7 @@ $$
 $$
 v_\pi(s) = E_\pi[R_{t+1} + \gamma v_\pi(S_{t+1}) | S_t = s]
 $$
-我们可以用 $ R_{t+1} + \gamma v_\pi(S_{t+1})$ 近似代替 $G_t$ ，此时有：
+我们可以用 $R_{t+1} + \gamma v_\pi(S_{t+1})$ 近似代替 $G_t$ ，此时有：
 $$
 \color{red}{v(S_t) \leftarrow v(S_t) + \alpha(R_{t+1} + \gamma v(S_{t+1})-v(S_t))}
 $$
