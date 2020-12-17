@@ -74,12 +74,12 @@ $$
 
 此时的 `score function` 为：
 $$
-\begin{align}
+\begin{aligned}
 \nabla_\theta log\pi_\theta(s,a) & = \nabla_\theta log \left[ \frac{1}{\sqrt{2\pi}\sigma} exp \left(-\frac{(a-\mu(s))^2}{2\sigma^2}\right) \right] \\
 & = \nabla_\theta \left[ log\;\frac{1}{\sqrt{2\pi}\sigma} - log\; exp \left(\frac{(a-\mu(s))^2}{2\sigma^2}\right) \right] \\
 & = - \nabla_\theta\left(\frac{(a-\phi(s)^T\theta)^2}{2\sigma^2}\right) \\
 & = \frac{(a-\mu(s))\phi(s)}{\sigma^2}
-\end{align}
+\end{aligned}
 $$
 
 ### 3、Policy Gradient 推导

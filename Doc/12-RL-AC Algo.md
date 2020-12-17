@@ -27,7 +27,7 @@ $$
 
 Sample QAC 算法使用线性特征组合来逼近 ：$Q_w(s,a) = \psi(s,a)^Tw$ 。通过 TD(0) 的方式来更新 参数 $w$ ，Actor使用 policy gradient来优化：
 
-![a9aZ8g.png](../../../Pictures/screenPicture/a9aZ8g.png)
+![a9aZ8g.png](https://s1.ax1x.com/2020/07/26/a9aZ8g.png)
 
 首先根据 策略 $\pi_\theta$ 生成一系列样本数据，然后得到TD Target 进一步计算 TD Error ，来更新 价值函数的参数 $w$ ，这里因为是线性特征组合，所以经过求导后直接取 feature（特征）来更新：$w \leftarrow w + \beta\delta\psi(s,a)$ 。然后第二部分，我们得到 $Q_w(s,a)$ 后直接乘以 `score function` 通过 policy gradient 来进行更新。然后一直重复这个步骤，就得到了 Simple QAC 算法。
 
@@ -61,7 +61,7 @@ $$
 
 本次代码我们还是采用 `CartPole-v1` 环境，在 REINFORCE算法中，agent 需要从头一直跑到尾，直到最终状态才开始进行学习，所以采用的回合更新制。 在AC中agent 采用是每步更新的方式。如下图所示
 
-![aKHtOJ.png](../../../Pictures/screenPicture/aKHtOJ.png)
+![aKHtOJ.png](https://s1.ax1x.com/2020/07/30/aKHtOJ.png)
 
 对于每一个 episode 流程如下，智能体每走一步都要分别更新 Critic 和 Actor 网络。注意：**我们需要先更新Critic，并计算出TD-error。再用TD-error更新Actor**。
 

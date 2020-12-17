@@ -29,7 +29,7 @@ $$
 
 由于Q-Learning 使用Q表格存储每个状态的所有动作价值，所以面对连续状态既如果状态非常多的情况就不能胜任，所有我们就用函数逼近的方法，使用神经网络来代替 Q 表格，其余流程不变，这样就得到了DQN算法。在[强化学习7——DQN算法详解](https://blog.csdn.net/november_chopin/article/details/107912720) 中已经详细介绍过 DQN算法，下面就简单回忆下DQN算法流程：
 
-![arwWRI.png](../../../Pictures/screenPicture/arwWRI.png)
+![arwWRI.png](https://s1.ax1x.com/2020/08/05/arwWRI.png)
 
 可以看出，DQN用神经网络代替Q表格，loss 函数就是神经网络当前的输出与target之间的差距，然后对损失函数求导更新网络 参数。
 
