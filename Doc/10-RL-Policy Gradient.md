@@ -129,19 +129,19 @@ $$
 & = \sum_\tau P(\tau;\theta) \nabla_\theta log\;P(\tau;\theta) \cdot R(\tau)
 \end{aligned}
 $$
-其实在上面式子中 $\tau$ 的轨迹分布我们是不知道的。所以我们可以采用 MC 采样的方法来近似表示，假如我们采集到 m 条轨迹，那么我们就可以把这 m 条奖励和取平均，就得到对优化目标的近似求导结果：
+这里$\nabla_\theta J(\theta)$ 是基于**轨迹**来表示的，其实轨迹 $\tau$ 的分布我们是不知道的。所以我们可以采用 MC 采样的方法来近似表示，假如我们采集到 m 条轨迹，那么我们就可以把这 m 条奖励和取平均，就得到对优化目标的近似求导结果：
 $$
 \color{red}\nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^mR(\tau_i)\;\nabla_\theta log\;P(\tau_i;\theta)
 $$
-那如何表示 $P(\tau;\theta)$ 呢？若一条轨迹图如下所示，可以看到是一系列的概率连乘，那么 $P(\tau;\theta)$ 就可以表示为：
-$$
-P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t)
-$$
-表示一条轨迹发生的概率，就是一系列概率的连乘。（注意，图中下标从 1 开始，而上面公式下标从 0 开始）
+那一条轨迹发生的概率 $P(\tau;\theta)$ 如何表示呢？若一条轨迹图如下所示，可以看到就是是一系列的概率连乘，（注意，图中下标从 1 开始，而上面公式下标从 0 开始）
 
 ![UxSJb9.png](https://s1.ax1x.com/2020/07/24/UxSJb9.png)
 
-上面式子我们是基于轨迹来计算的，现在我们就把 $\nabla_\theta J(\theta)$ 中的将轨迹分解为状态和动作：
+那么 $P(\tau;\theta)$ 就可以表示为：
+$$
+P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t)
+$$
+现在我们就把 $\nabla_\theta J(\theta)$ 中的将轨迹分解为状态和动作：
 $$
 \begin{aligned}
 \nabla_\theta log\;P(\tau;\theta) & = \nabla_\theta log\left[P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t) \right] \\
