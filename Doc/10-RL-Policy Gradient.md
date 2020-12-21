@@ -100,7 +100,7 @@ $$
 $$
 \begin{aligned}
 \nabla J(\theta) & = \sum_{s\in S}d(s)\sum_{a\in A}{\color{red}\pi_\theta(s,a)\; \nabla_\theta log\;\pi_{\theta}(s,a)}\cdot r \\
-& =E_{\pi_\theta}[r\cdot \nabla_\theta log\;\pi_{\theta}(s,a)]
+& =E_{\pi_\theta}[\nabla_\theta log\;\pi_{\theta}(s,a)\cdot r]
 \end{aligned}
 $$
 
@@ -117,10 +117,6 @@ $$
 $$
 J(\theta) = E_{\pi_\theta}\left[\sum_{t=0}^TR(s_t, a_t)\right] = \sum_\tau P(\tau;\theta)R(\tau)
 $$
-那如何表示 $P(\tau;\theta)$ 呢？若一条轨迹图如下所示，可以看到是一系列的连乘，那么 $P(\tau;\theta)$ 就可以表示为： $P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t)$ 表示一条轨迹发生的概率，就是一系列概率的连乘。（注意，图中下表从 1 开始，而上面公式下表从 0 开始，注意区分）
-
-![UxSJb9.png](https://s1.ax1x.com/2020/07/24/UxSJb9.png)
-
 此时的最优参数 $\theta^*$ 可以表示为：
 $$
 \theta^* = arg\;max_\theta J(\theta) = arg\;max \sum_\tau P(\tau;\theta)R(\tau)
@@ -135,20 +131,28 @@ $$
 $$
 其实在上面式子中 $\tau$ 的轨迹分布我们是不知道的。所以我们可以采用 MC 采样的方法来近似表示，假如我们采集到 m 条轨迹，那么我们就可以把这 m 条奖励和取平均，就得到对优化目标的近似求导结果：
 $$
-\nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^mR(\tau_i)\;\nabla_\theta log\;P(\tau_i;\theta)
+\color{red}\nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^mR(\tau_i)\;\nabla_\theta log\;P(\tau_i;\theta)
 $$
-上面式子我们是基于轨迹来计算的，现在我们将轨迹分解为状态和动作：
+那如何表示 $P(\tau;\theta)$ 呢？若一条轨迹图如下所示，可以看到是一系列的概率连乘，那么 $P(\tau;\theta)$ 就可以表示为：
+$$
+P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t)
+$$
+表示一条轨迹发生的概率，就是一系列概率的连乘。（注意，图中下标从 1 开始，而上面公式下标从 0 开始）
+
+![UxSJb9.png](https://s1.ax1x.com/2020/07/24/UxSJb9.png)
+
+上面式子我们是基于轨迹来计算的，现在我们就把 $\nabla_\theta J(\theta)$ 中的将轨迹分解为状态和动作：
 $$
 \begin{aligned}
-\nabla_\theta log\;P(\tau_i;\theta) & = \nabla_\theta log\left[P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t) \right] \\
+\nabla_\theta log\;P(\tau;\theta) & = \nabla_\theta log\left[P(\tau;\theta) = \mu(s_0) \prod_{t=0}^{T-1}\pi_\theta(a_t|s_t)\cdot p(s_{t+1}|s_t,a_t) \right] \\
 & = \nabla_\theta\left[log\;\mu(s_0) + \sum_{t=0}^{T-1}log\;\pi_\theta(a_t|s_t) + \sum_{t=0}^{T-1}log\;p(s_{t+1}|s_t,a_t) \right] \\
 & = \sum_{t=0}^{T-1}\nabla_\theta\;log\;\pi_\theta(a_t|s_t)
 \end{aligned}
 $$
-对于一连串的连乘形式，把 `log` 放进去就会变成连加的形式，在上面式子中，只有中间一项和 参数 $\theta$ 有关，使得最终结果大大简化。这也是为何使用 `likelihood ratio`  的原因，这样就可以消去很多无关的变量。然后就得到了优化目标的最终求导结果：
+对于一连串的连乘形式，把 `log` 放进去就会变成连加的形式，可以看到，上面式子只有中间一项和参数 $\theta$ 有关，使得最终结果大大简化。这也是为何使用 `likelihood ratio`  的原因，这样就可以消去很多无关的变量。然后就得到了优化目标的最终求导结果：
 $$
 \color{red}\nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^mR(\tau_i)\;\sum_{t=0}^{T-1}\nabla_\theta\;log\;\pi_\theta(a_t^i|s_t^i)
 $$
 
-对于当前的目标函数 梯度，是基于MC采样得到的，会有比较高的方差 ，下一篇文章将会介绍两种减小方差的方法，以及 Policy Gradient 基础的 `REINFORCE` 算法。
+对于当前的目标函数 梯度，是基于MC采样得到的，会有比较高的方差 ，下一篇文章将会介绍两种减小方差的方法，以及 Policy Gradient 基础的算法 `REINFORCE` 
 
