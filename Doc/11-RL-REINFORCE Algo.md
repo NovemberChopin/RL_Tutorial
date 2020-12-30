@@ -13,16 +13,25 @@ $$
 
 ### 1、使用时序因果关系
 
+Policy gradient estimator: 
+$$
+\nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^m \left(\;\sum_{t=1}^{T}\nabla_\theta\;log\;\pi_\theta(a_t^i|s_t^i)\right)\left(\sum_{t=1}^Tr(s_t^i, a_t^i) \right)
+$$
+
+> 我们的目的是为了优化策略函数 $\pi$ ，$\pi$ 有很多要优化的参数 $\theta$。那么我们在每一个点都计算 $\pi$ 的 likelihood，而每个点能获得奖励是一个值，奖励的大小可以表示当前 likelihood的好坏，相当于对相应的 likelihood 进行了加权。我们希望优化过程中，策略尽可能进入到得到奖励多的区域中。
+>
+> 奖励值的大小可以作为判断当前策略好坏的依据。good action is made more likely, bad action is made less likely.
+
 使用使用时序因果关系可以减少许多不必要的项
 $$
 \nabla_\theta E_\tau[R] = E_\tau \left[\left(\sum_{t=0}^{T-1}r_t\right) \left( \sum_{t=0}^{T-1}\nabla_\theta\;log\;\pi_\theta(a_t|s_t)\right) \right]
 $$
 
-对于一条轨迹中的某一点获得的奖励 $r_{t'}$ 可以表示为：
+对于一条轨迹中的某一点获得的奖励 $r_{t'}$ 可以表示为如下式。
 $$
 \nabla_\theta E_\tau[r_{t'}] = E_\tau\left[r_{t'}\sum_{t=0}^{t'}\nabla_\theta\;log\;\pi_\theta(a_t|s_t)\right]
 $$
-然后把一条轨迹上所有的点的导数加起来：
+然后把一条轨迹上所有点奖励的导数加起来：
 $$
 \begin{aligned}
 \nabla_\theta J(\theta) = \nabla_\theta E_{\tau～\pi_\theta}[R] & = E_\tau \left[\sum_{t'=0}^{T-1}r_{t'} \sum_{t=0}^{t'}\nabla_\theta\;log\;\pi_\theta(a_t|s_t)\right] \\

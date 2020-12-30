@@ -60,7 +60,7 @@ $$
 <img src="https://s1.ax1x.com/2020/07/23/UqG8cd.png" alt="UqG8cd.png" style="zoom: 80%;" />
 ![UqG31H.png](https://s1.ax1x.com/2020/07/23/UqG31H.png)
 
-那么我们让老鼠在一段时间间隔内不动（固定住），而这期间，猫是可以动的，这样就比较容易抓住老鼠了。在 DQN 中也是这样解决的，我们有两套一样的网络，分别是 Q estimation 网络和 Q Target 网络。要做的就是固定住 Q estimation 网络，那如何固定呢？比如我们可以让 Q Target 网路训练10次，训练期间  Q Estimation 网络仅仅作为监督数据，然后10次过后，我们把 Q Target 网络更新后的 参数 w 赋给 Q Estimation 网络。然后我们再让Q Target 网路训练10次，如此往复下去，试想如果不固定 Q Target 网络，两个网络都在不停地变化，这样 拟合是很困难的，如果我们让 Q Target 网络参数一段时间固定不变，那么拟合过程就会容易很多。下面是 DQN 算法流程图：
+那么我们让老鼠在一段时间间隔内不动（固定住），而这期间，猫是可以动的，这样就比较容易抓住老鼠了。在 DQN 中也是这样解决的，我们有两套一样的网络，分别是 Q estimation 网络和 Q Target 网络。要做的就是固定住 Q target 网络，那如何固定呢？比如我们可以让 Q estimation 网路训练10次，然后把 Q estimation 网络更新后的参数 w 赋给 Q target 网络。然后我们再让Q estimation 网路训练10次，如此往复下去，试想如果不固定 Q Target 网络，两个网络都在不停地变化，这样 拟合是很困难的，如果我们让 Q Target 网络参数一段时间固定不变，那么拟合过程就会容易很多。下面是 DQN 算法流程图：
 
 [![UqUf1S.png](https://s1.ax1x.com/2020/07/23/UqUf1S.png)](https://imgchr.com/i/UqUf1S)
 
