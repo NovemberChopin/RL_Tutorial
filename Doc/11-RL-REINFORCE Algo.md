@@ -84,13 +84,13 @@ for episode in range(TRAIN_EPISODES):
     episode_reward = 0
     for step in range(MAX_STEPS):  # in one episode
         if RENDER: env.render()
-            action = agent.get_action(state)
-            next_state, reward, done, _ = env.step(action)
-            agent.store_transition(state, action, reward)
-            state = next_state
-            episode_reward += reward
-            if done:break
-                agent.learn()
+        action = agent.get_action(state)
+        next_state, reward, done, _ = env.step(action)
+        agent.store_transition(state, action, reward)
+        state = next_state
+        episode_reward += reward
+        if done:break
+            agent.learn()
 ```
 
 ### 2、计算奖励

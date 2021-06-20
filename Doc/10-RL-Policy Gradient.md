@@ -84,11 +84,11 @@ $$
 
 ### 3、Policy Gradient 推导
 
-对于 Policy Gradient 的求导应该来说是比较复杂的，重点是理解对于一条轨迹如何表示，弄明白符号所代表的含义，推导过程也不是那么复杂。下面我们正式开始 Policy Gradient 的推导，我们首先推导对于一条 MDP 轨迹内的 Policy Gradient，然后再推导有多条轨迹的情况。
+对于 Policy Gradient 的求导应该来说是比较复杂的，重点是理解对于一条轨迹如何表示，弄明白符号所代表的含义，推导过程也不是那么复杂。下面我们正式开始 Policy Gradient 的推导，我们首先推导对于一条 MDP 轨迹**只走一步**的 Policy Gradient，然后再推导有多条轨迹的情况。
 
 #### 1）Policy Gradient for One-Step MDPs
 
-我们开始的状态 s 有：$s\;～\;d(s)$ 。对于这段时间的奖励 为 $r = R(s,a)$ 。
+我们开始的状态 s 有：$s\;～\;d(s)$ 。对于走一步的奖励 为 $r = R(s,a)$ 。
 
 > 上文有提到其中 $d_{\pi_\theta}(s)$ 是基于策略 $\pi_\theta$ 生成的马尔科夫链关于状态 的静态分布
 
