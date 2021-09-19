@@ -66,7 +66,7 @@ TD 对比 MC：
 
 在迭代的时候，我们基于 $\epsilon$ -贪婪法在当前状态 $S_t$ 选择一个动作 $A_t$， 然后会进入到下一个 状态 $S_{t+1}$，同时获得奖励 $R_{t+1}$，在新的状态 $S_{t+1}$ 我们同样基于 $\epsilon$-贪婪法选择一个动作 $A_{t+1}$，然后用它来更新我们的价值函数，更新公式如下：
 $$
-A(S_t, A_t) \leftarrow A(S_t, A_t) + \alpha \left[R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - A(S_t, A_t)\right]
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \left[R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)\right]
 $$
 
 - 注意：**这里我们选择的动作 $A_{t+1}$，就是下一步要执行的动作**，这点是和Q-Learning算法的最大不同
