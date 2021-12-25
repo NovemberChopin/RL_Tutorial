@@ -1,6 +1,7 @@
 
 
 import argparse
+import math
 import os
 import time
 
@@ -9,62 +10,71 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import torch
+from torch import distributions
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.distributions import Categorical
+import torch.distributions
 
 parser = argparse.ArgumentParser(description='Train or test neural net motor controller.')
 parser.add_argument('--train', dest='train', action='store_true', default=True)
-parser.add_argument('--test', dest='test', action='store_true', default=True)
+parser.add_argument('--test', dest='test', action='store_true', default=False)
 args = parser.parse_args()
 
 #####################  hyper parameters  ####################
 
-ENV_ID = 'CartPole-v1'  # environment id
+ENV_ID = 'Pendulum-v1'  # environment id
 RANDOM_SEED = 1  # random seed, can be either an int number or None
 RENDER = False  # render while training
 
-ALG_NAME = 'PG'
+ALG_NAME = 'PG-Continue'
 TRAIN_EPISODES = 200
 TEST_EPISODES = 10
-MAX_STEPS = 500
-hidden_node = 32
+MAX_STEPS = 200
+
+hidden_1 = 32
+hidden_2 = 16
+
+var = 1
+var_delta = 0.999
 
 ###############################  PG  ####################################
 
 
 class Net(nn.Module):
-    def __init__(self, s_dim, hidden, a_num):
+    def __init__(self, state_dim, action_dim, action_bound):
         super(Net, self).__init__()
-        self.net = nn.Sequential(nn.Linear(s_dim, hidden),
-                                 nn.ReLU(),
-                                 nn.Linear(hidden, a_num),
-                                 nn.Softmax(dim=1))
-    def forward(self, s):
-        return self.net(s)
+        self.layer1 = nn.Linear(state_dim, hidden_1)
+        self.layer2 = nn.Linear(hidden_1, hidden_2)
+        self.output = nn.Linear(hidden_2, action_dim)
+
+        self.action_bound = action_bound
+    def forward(self, state):
+        x = F.relu(self.layer1(state))
+        x = F.relu(self.layer2(x))
+        x = self.output(x)
+        output = torch.tanh(x) * self.action_bound
+        return output
 
 
 class PolicyGradient:
-    def __init__(self, state_dim, action_num, learning_rate=0.01, gamma=0.9):
+    def __init__(self, state_dim, action_dim, action_bound, learning_rate=0.01, gamma=0.9):
         self.gamma = gamma
         self.state_buffer, self.action_buffer, self.reward_buffer = [], [], []
-
-        self.model = Net(state_dim, hidden_node, action_num)
+        self.action_bound = action_bound
+        self.var = var
+        self.var_delta = var_delta
+        self.model = Net(state_dim, action_dim, action_bound)
         self.optimizer = torch.optim.Adam(self.model.parameters(), learning_rate)
-
-
-    def get_action(self, s, greedy=False):
-        """
-        choose action with probabilities.
-        :param s: state
-        :param greedy: choose action greedy or not
-        :return: act
-        """
-        s = torch.FloatTensor(s).view(1, -1)
-        _probs = self.model(s)
-        dist = Categorical(_probs)
+    
+    def get_action(self, state, greedy=False):
+        state = torch.FloatTensor(state).view(1, -1)
+        action = self.model(state)
         if greedy:
-            return torch.argmax(_probs).detach().item()
-        action = (dist.sample()).detach().item()
+            return action[0]
+        with torch.no_grad():
+            action = np.clip(np.random.normal(action[0], self.var), -self.action_bound, self.action_bound)
+            self.var = self.var * self.var_delta
         return action
         
 
@@ -81,11 +91,12 @@ class PolicyGradient:
         """
         discounted_reward = self._discount_and_norm_rewards()
         state = torch.FloatTensor(self.state_buffer)
-        action = torch.FloatTensor(self.action_buffer)
         reward = torch.FloatTensor(discounted_reward)
-        prob = self.model(state)
-        dist = Categorical(probs=prob)
-        loss = -torch.sum(dist.log_prob(action) * reward)
+
+        mu = self.model(state)
+        pi = distributions.Normal(mu, self.var)
+        action = np.clip(pi.sample(sample_shape=mu.shape), -self.action_bound, self.action_bound)
+        loss = -torch.sum(pi.log_prob(action) * reward)
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
@@ -141,8 +152,9 @@ if __name__ == '__main__':
     env.seed(RANDOM_SEED)
 
     agent = PolicyGradient(
-        action_num=env.action_space.n,
+        action_dim=env.action_space.shape[0],
         state_dim=env.observation_space.shape[0],
+        action_bound=env.action_space.high[0]
     )
 
     t0 = time.time()
