@@ -71,7 +71,7 @@ class PolicyGradient:
         state = torch.FloatTensor(state).view(1, -1)
         action = self.model(state)
         if greedy:
-            return action[0]
+            return action[0].item()
         with torch.no_grad():
             action = np.clip(np.random.normal(action[0], self.var), -self.action_bound, self.action_bound)
             self.var = self.var * self.var_delta
@@ -200,6 +200,7 @@ if __name__ == '__main__':
             for step in range(MAX_STEPS):
                 env.render()
                 action = agent.get_action(state, True)
+                action = [action]
                 state, reward, done, info = env.step(action)
                 episode_reward += reward
                 if done:
