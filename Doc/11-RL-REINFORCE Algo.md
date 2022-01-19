@@ -18,7 +18,7 @@ $$
 \nabla_\theta J(\theta) \approx \frac{1}{m}\sum_{i=1}^m \left(\;\sum_{t=1}^{T}\nabla_\theta\;log\;\pi_\theta(a_t^i|s_t^i)\right)\left(\sum_{t=1}^Tr(s_t^i, a_t^i) \right)
 $$
 
-> 我们的目的是为了优化策略函数 $\pi$ ，$\pi$ 有很多要优化的参数 $\theta$。那么我们在每一个点都计算 $\pi$ 的 likelihood，而每个点能获得奖励是一个值，奖励的大小可以表示当前 likelihood的好坏，相当于对相应的 likelihood 进行了加权。我们希望优化过程中，策略尽可能进入到得到奖励多的区域中。
+> 我们的目的是为了优化策略函数 $\pi$ ，$\pi$ 有很多要优化的参数 $\theta$。那么我们在每一个点都计算 $\pi$ 的 likelihood，而每个点能获得奖励是一个值，奖励的大小可以表示当前 likelihood的好坏，相当于对相应的 likelihood 进行了加权。我们希望优化过程中，增加奖励大的动作出现的概率，减小奖励小的动作出现的概率。
 >
 > 奖励值的大小可以作为判断当前策略好坏的依据。good action is made more likely, bad action is made less likely.
 
