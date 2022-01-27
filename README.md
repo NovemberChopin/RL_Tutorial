@@ -6,6 +6,9 @@
 ```
 git clone git@github.com:NovemberChopin/RL_Tutorial.git
 ```
+推荐环境：
+- tensorflow: 2.2.0
+- tensorlayer: 2.2.3
 
 #### 2、教程
 
