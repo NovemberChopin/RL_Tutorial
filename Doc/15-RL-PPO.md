@@ -83,4 +83,7 @@ PPO2没有使用 KL 距离限制，而是直接用 clip 剪切。把重要性权
 
 ![](https://s3.bmp.ovh/imgs/2022/01/21c2ad87cfa6a679.png)
 
-以上就是PPO理论部分的内容了，部分图片参考了李宏毅老师的PPO。李宏毅老师讲的真的不错，简单易懂，这里放上课程链接：[李宏毅强化学习](https://www.bilibili.com/video/BV1UE411G78S?from=search&seid=3408487385073313190&spm_id_from=333.337.0.0)
+以上就是PPO理论部分的内容了，代码实现连接见[PPO TF2.X实现](https://github.com/NovemberChopin/RL_Tutorial/blob/master/code/PPO.py)，对比着PG的代码和上述理论知识，还是挺好理解的。本篇文章部分图片参考了李宏毅老师的课件，另外李宏毅老师讲的真的不错，简单易懂，这里放上课程链接：[李宏毅强化学习](https://www.bilibili.com/video/BV1UE411G78S?from=search&seid=3408487385073313190&spm_id_from=333.337.0.0)。
+另外，本强化学习算法系列尤其是头几篇文章参考了周博磊老师的[强化学习纲要](https://space.bilibili.com/511221970/channel/seriesdetail?sid=764099)，周老师的课程更加偏理论一些，对初学者可能不太友好，建议先对算法有个直观的了解然后再观看。
+
+强化学习常用算法打算就介绍这么多，后面会更新一些模仿学习和多智能体强化学习的内容
