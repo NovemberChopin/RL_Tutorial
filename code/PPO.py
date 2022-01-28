@@ -1,27 +1,5 @@
+
 """
-Proximal Policy Optimization (PPO)
-----------------------------
-A simple version of Proximal Policy Optimization (PPO) using single thread.
-PPO is a family of first-order methods that use a few other tricks to keep new policies close to old.
-PPO methods are significantly simpler to implement, and empirically seem to perform at least as well as TRPO.
-
-Reference
----------
-Proximal Policy Optimization Algorithms, Schulman et al. 2017
-High Dimensional Continuous Control Using Generalized Advantage Estimation, Schulman et al. 2016
-Emergence of Locomotion Behaviours in Rich Environments, Heess et al. 2017
-MorvanZhou's tutorial page: https://morvanzhou.github.io/tutorials
-
-Environment
------------
-Openai Gym Pendulum-v0, continual action space
-
-Prerequisites
---------------
-tensorflow >=2.0.0a0
-tensorflow-probability 0.6.0
-tensorlayer >=2.0.0
-
 To run
 ------
 python tutorial_PPO.py --train/test
@@ -137,29 +115,20 @@ class PPO(object):
     def store_transition(self, state, action, reward):
         """
         Store state, action, reward at each step
-        :param state:
-        :param action:
-        :param reward:
-        :return: None
         """
         self.state_buffer.append(state)
         self.action_buffer.append(action)
         self.reward_buffer.append(reward)
 
     def a_train(self, state, action, adv):
-        '''
-        更新策略网络(policy network)
-        '''
-        # 输入时s，a，td-error。这个和AC是类似的。
-        state = np.array(state, np.float32)         #state
-        action = np.array(action, np.float32)         #action
-        adv = np.array(adv, np.float32)     #td-error
+        """ 更新策略网络(policy network) """
+        state = np.array(state, np.float32)
+        action = np.array(action, np.float32)
+        adv = np.array(adv, np.float32)
 
 
         with tf.GradientTape() as tape:
-
-            # 【敲黑板】这里是重点！！！！
-            # 我们需要从两个不同网络，构建两个正态分布pi，oldpi。
+            # 构建两个正态分布pi，oldpi。
             mu, sigma = self.actor(state)
             pi = tfp.distributions.Normal(mu, sigma)
 
@@ -241,7 +210,7 @@ class PPO(object):
         else:
             for _ in range(A_UPDATE_STEPS):
                 self.a_train(s, a, adv)
-        # update critic
+
         for _ in range(C_UPDATE_STEPS):
             self.c_train(r, s)
 
@@ -290,7 +259,6 @@ if __name__ == '__main__':
 
     env = gym.make(ENV_NAME).unwrapped
 
-    # reproducible
     env.seed(RANDOMSEED)
     np.random.seed(RANDOMSEED)
     tf.random.set_seed(RANDOMSEED)
@@ -304,7 +272,6 @@ if __name__ == '__main__':
     if args.train:
         all_ep_r = []
 
-        # 更新流程：
         for episode in range(EP_MAX):
             state = env.reset()
             buffer_s, buffer_a, buffer_r = [], [], []
@@ -318,7 +285,6 @@ if __name__ == '__main__':
                 state = state_
                 episode_reward += reward
 
-                # N步更新的方法，每BATCH步了就可以进行一次更新
                 if (t + 1) % BATCH == 0 or t == EP_LEN - 1:
                     ppo.finish_path(state_, done)
                     ppo.update()
